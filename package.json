@@ -1,4 +1,16 @@
 {
+  "name": "ara-service",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "https://github.com/antonhallstrom/ara-service.git",
+  "author": "Anton Hallstrom <antonhallstrom@live.se>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "express": "^4.16.4"
   }
