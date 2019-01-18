@@ -1,4 +1,4 @@
-# <img src='https://i.imgur.com/jcA65WN.png' height='100' alt='Ara Logo' aria-label='Ara' />
+# <img src='https://i.imgur.com/jTOpvtG.png' height='100' alt='Ara Logo' aria-label='Ara' />
 
 ## Server-side website programming
 
