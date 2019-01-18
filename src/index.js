@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const DEFAULT_PORT = 5000;
 
-// Prevent CORS errors
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -24,7 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/api", (req, res) => {
+app.get("/api/v1/posts", (req, res) => {
   res.status(200).json({ message: "yum yum", amount: 0 });
 });
 
