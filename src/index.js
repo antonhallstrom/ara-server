@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5000;
+const DEFAULT_PORT = 5000;
 
-app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/api", (req, res) => {
+  res.status(200).json({ message: "yum yum", amount: 0 });
+});
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+app.listen(process.env.PORT || DEFAULT_PORT, () =>
+  console.log(`Listening on ${process.env.PORT || DEFAULT_PORT}`)
+);
