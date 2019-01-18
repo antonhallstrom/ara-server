@@ -6,7 +6,8 @@
   "author": "Anton Hallstrom <antonhallstrom@live.se>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "deploy": "git push heroku master"
   },
   "engines": {
     "node": "10.x"
