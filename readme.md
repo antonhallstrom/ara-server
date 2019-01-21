@@ -1,6 +1,6 @@
 # <img src='https://i.imgur.com/pFo8Xa7.png' height='100' alt='Ara Logo' aria-label='Ara' />
 
-A [Node.js](https://nodejs.org/en/) backend for the Ara client application.
+A [Node.js](https://nodejs.org/en/) server application for the Ara client application.
 
 ---
 
