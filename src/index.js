@@ -34,8 +34,8 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/posts', postsRoutes)
 
-app.use('/api/v1/', (res, req, next) => {
-  return res.status(200).json({ message: 'yum' })
+app.use('/api/v1/', (req, res, next) => {
+  return res.send(200).json({ message: 'yum' })
 })
 
 app.listen(process.env.PORT || DEFAULT_PORT, () =>
