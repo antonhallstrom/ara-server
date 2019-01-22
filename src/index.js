@@ -2,13 +2,17 @@ const dotenv = require('dotenv')
 const express = require('express')
 const app = express()
 const DEFAULT_PORT = 5000
-const db = require('./database/mongodb.js')
 const postsRoutes = require('./api/posts/routes.js')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
+
+mongoose
+  .connect(process.env.MONGO_DB_ATLAS_URI, { useNewUrlParser: true })
+  .then(() => console.log('Connected'))
+  .catch(err => console.log('Failed to connect.', err))
 
 dotenv.config()
-db.connect()
 
 app.use(morgan('dev'))
 app.use(
