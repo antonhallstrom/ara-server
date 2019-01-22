@@ -7,12 +7,11 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 
+dotenv.config()
 mongoose
   .connect(process.env.MONGO_DB_ATLAS_URI, { useNewUrlParser: true })
   .then(() => console.log('Connected'))
   .catch(err => console.log('Failed to connect.', err))
-
-dotenv.config()
 
 app.use(morgan('dev'))
 app.use(
