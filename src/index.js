@@ -2,16 +2,13 @@ const dotenv = require('dotenv')
 const express = require('express')
 const app = express()
 const DEFAULT_PORT = 5000
+const db = require('./database/mongodb.js')
 const postsRoutes = require('./api/posts/routes.js')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const mongoose = require('mongoose')
 
 dotenv.config()
-mongoose
-  .connect(process.env.MONGO_DB_ATLAS_URI, { useNewUrlParser: true })
-  .then(() => console.log('Connected'))
-  .catch(err => console.log('Failed to connect.', err))
+db.connect()
 
 app.use(morgan('dev'))
 app.use(
@@ -36,10 +33,6 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/v1/posts', postsRoutes)
-
-app.use('/api/v1/', (req, res, next) => {
-  return res.send(200).json({ message: 'yum' })
-})
 
 app.listen(process.env.PORT || DEFAULT_PORT, () =>
   console.log(`Listening on ${process.env.PORT || DEFAULT_PORT}`)
