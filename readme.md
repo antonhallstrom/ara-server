@@ -6,7 +6,7 @@ A [Node.js](https://nodejs.org/en/) server application for the Ara client applic
 
 # Getting Started
 
-**Base URL:** https://lit-shore-63278.herokuapp.com/api/v1
+**Base URL:** https://aqueous-citadel-93626.herokuapp.com/api/v1
 
 # Resources
 
