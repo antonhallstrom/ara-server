@@ -2,6 +2,10 @@
 
 A [Node.js](https://nodejs.org/en/) server application for the Ara client application.
 
+# Heroku is used as host.
+
+# mongoDB is used as database - https://docs.mongodb.com/manual/introduction/
+
 ---
 
 # Getting Started

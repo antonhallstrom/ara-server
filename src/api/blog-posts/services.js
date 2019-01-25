@@ -1,16 +1,17 @@
 const mongoose = require('mongoose')
-const models = require('./models')
+const BlogPost = require('../../models/blog-post')
 
 const get = async () => {
   try {
-    return await models.Post.find().select('title _id')
+    return await BlogPost.find().select('title _id')
   } catch (e) {
+    console.log(e)
     return e
   }
 }
 
 const post = async payload => {
-  const doc = new models.Post({
+  const doc = new BlogPost({
     _id: new mongoose.Types.ObjectId(),
     title: payload.title,
   })
@@ -21,12 +22,12 @@ const post = async payload => {
   }
 }
 
-const remove = async payload => {
+const _delete = async payload => {
   try {
-    return await models.Post.remove({ _id: payload.id })
+    return await BlogPost.remove({ _id: payload.id })
   } catch (e) {
     return e
   }
 }
 
-module.exports = { get, post, remove }
+module.exports = { get, post, delete: _delete }

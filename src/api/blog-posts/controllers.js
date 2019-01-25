@@ -1,4 +1,6 @@
+const R = require('ramda')
 const services = require('./services')
+
 /**
  * Gets posts
  * @param {*} req
@@ -8,10 +10,7 @@ const services = require('./services')
 const _get = async (req, res, next) => {
   try {
     const result = await services.get()
-    return res.status(200).json({
-      message: 'Handling GET request to /posts',
-      result,
-    })
+    return res.status(200).json(result)
   } catch (err) {
     return res.status(500).json({ message: err })
   }
@@ -28,10 +27,7 @@ const _post = async (req, res, next) => {
     const result = await services.post({
       title: req.body.title,
     })
-    return res.status(201).json({
-      message: 'Handling POST request to /posts',
-      result,
-    })
+    return res.status(201).json(result)
   } catch (err) {
     return res.status(500).json({ message: err })
   }
@@ -44,16 +40,21 @@ const _post = async (req, res, next) => {
  * @param {*} next
  */
 const _delete = async (req, res, next) => {
-  try {
-    const result = await services.delete({
-      id: req.params.postId,
-    })
-    return res.status(200).json({
-      message: 'Handling DELETE request to /posts',
-      result,
-    })
-  } catch (err) {
-    return res.status(500).json({ message: err })
+  if (R.isNil(req.params.postId) || req.params.postId === 'undefined') {
+    return res
+      .status(400)
+      .json({ message: `Missing required parameter postId.` })
+  } else {
+    try {
+      await services.delete({
+        id: req.params.postId,
+      })
+      return res.status(200).json({
+        message: `Deleted post.`,
+      })
+    } catch (err) {
+      return res.status(500).json({ message: err })
+    }
   }
 }
 
