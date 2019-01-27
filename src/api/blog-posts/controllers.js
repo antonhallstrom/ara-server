@@ -1,13 +1,27 @@
 const R = require('ramda')
 const services = require('./services')
+const { validationResult } = require('express-validator/check')
 
 /**
- * Gets posts
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * Express request object representing the HTTP request
+ * @typedef Request
+ * @type {Object}
+ * @see [Express API reference]{@link https://expressjs.com/en/4x/api.html#res}
  */
-const _get = async (req, res, next) => {
+
+/**
+ * Express response object representing the HTTP response of the request
+ * @typedef Response
+ * @type {Object}
+ * @see [Express API reference]{@link https://expressjs.com/en/4x/api.html#res}
+ */
+
+/**
+ * Gets blog posts
+ * @param {Request} req - HTTP request
+ * @param {Response} res - HTTP response
+ */
+const _get = async (req, res) => {
   try {
     const result = await services.get()
     return res.status(200).json(result)
@@ -17,15 +31,15 @@ const _get = async (req, res, next) => {
 }
 
 /**
- * Stores post
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * Stores blog post
+ * @param {Request} req - HTTP request
+ * @param {Response} res - HTTP response
  */
-const _post = async (req, res, next) => {
+const _post = async (req, res) => {
   try {
     const result = await services.post({
       title: req.body.title,
+      content: req.body.content,
     })
     return res.status(201).json(result)
   } catch (err) {
@@ -34,20 +48,18 @@ const _post = async (req, res, next) => {
 }
 
 /**
- * Deletes a post
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * Deletes blog post
+ * @param {Request} req - HTTP request
+ * @param {Response} res - HTTP response
  */
-const _delete = async (req, res, next) => {
-  if (R.isNil(req.params.postId) || req.params.postId === 'undefined') {
-    return res
-      .status(400)
-      .json({ message: `Missing required parameter postId.` })
+const _delete = async (req, res) => {
+  const errors = validationResult(req)
+  if (R.not(errors.isEmpty())) {
+    return res.status(422).json({ errors: errors.array() })
   } else {
     try {
       await services.delete({
-        id: req.params.postId,
+        postId: req.body.postId,
       })
       return res.status(200).json({
         message: `Deleted post.`,

@@ -1,5 +1,6 @@
 const dotenv = require('dotenv')
 const express = require('express')
+const expressValidator = require('express-validator')
 const app = express()
 const DEFAULT_PORT = 5000
 const db = require('./database/mongodb.js')
@@ -18,7 +19,7 @@ app.use(
   })
 )
 app.use(bodyParser.json())
-
+app.use(expressValidator())
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader(

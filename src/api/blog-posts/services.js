@@ -1,33 +1,48 @@
 const mongoose = require('mongoose')
 const BlogPost = require('../../models/blog-post')
 
-const get = async () => {
-  try {
-    return await BlogPost.find().select('title _id')
-  } catch (e) {
-    console.log(e)
-    return e
-  }
+/**
+ * Gets all post
+ * @returns {Promise.<Object[]|Error>} A list of posts if fulfilled or error if rejected
+ */
+const _get = async () => {
+  return await BlogPost.find()
+    .select('title content published _id')
+    .then(res => res)
+    .catch(e => e)
 }
 
-const post = async payload => {
+/**
+ * Saves a post
+ * @param {Object} payload
+ * @param {String} payload.title - Title
+ * @param {String} payload.content - Content
+ * @returns {Promise.<Object|Error>} The saved post if fulfilled or error if rejected
+ */
+const _post = async payload => {
   const doc = new BlogPost({
     _id: new mongoose.Types.ObjectId(),
     title: payload.title,
+    content: payload.content,
+    published: new Date(),
   })
-  try {
-    return await doc.save()
-  } catch (e) {
-    return e
-  }
+
+  await doc
+    .save()
+    .then(res => res)
+    .catch(e => e)
 }
 
+/**
+ * Deletes post with provided postId
+ * @param {Object} payload
+ * @param {String} postId - Unique identifier for a post
+ * @returns {Promise.<Object|Error>} Deleted post if fulfilled or error if rejected
+ */
 const _delete = async payload => {
-  try {
-    return await BlogPost.remove({ _id: payload.id })
-  } catch (e) {
-    return e
-  }
+  return await BlogPost.deleteOne({ _id: payload.postId })
+    .then(res => res)
+    .catch(e => e)
 }
 
-module.exports = { get, post, delete: _delete }
+module.exports = { get: _get, post: _post, delete: _delete }
