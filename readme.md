@@ -2,9 +2,9 @@
 
 A [Node.js](https://nodejs.org/en/) server application for the Ara client application.
 
-# Heroku is used as host.
-
-# mongoDB is used as database - https://docs.mongodb.com/manual/introduction/
+Heroku is used for handling deployments and hosting of the Ara server application.
+[MongoDB](https://docs.mongodb.com/manual/introduction/) is used as database, responsible for
+storing blog posts created from Ara client application.
 
 ---
 
