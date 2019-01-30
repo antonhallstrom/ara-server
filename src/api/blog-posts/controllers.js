@@ -40,6 +40,7 @@ const _post = async (req, res) => {
     const result = await services.post({
       title: req.body.title,
       content: req.body.content,
+      shouldPublish: req.body.shouldPublish,
     })
     return res.status(201).json(result)
   } catch (err) {
@@ -54,6 +55,7 @@ const _post = async (req, res) => {
  */
 const _delete = async (req, res) => {
   const errors = validationResult(req)
+
   if (R.not(errors.isEmpty())) {
     return res.status(422).json({ errors: errors.array() })
   } else {
@@ -70,4 +72,27 @@ const _delete = async (req, res) => {
   }
 }
 
-module.exports = { get: _get, post: _post, delete: _delete }
+/**
+ * Patches blog post
+ * @param {Request} req - HTTP request
+ * @param {Response} res - HTTP response
+ */
+const _put = async (req, res) => {
+  const errors = validationResult(req)
+
+  if (R.not(errors.isEmpty())) {
+    return res.status(422).json({ errors: errors.array() })
+  } else {
+    try {
+      await services.put({
+        postId: req.body.postId,
+        properties: req.body.properties,
+      })
+      return res.status(202).json({ message: 'Published.' })
+    } catch (err) {
+      return res.status(500).json({ message: err })
+    }
+  }
+}
+
+module.exports = { get: _get, post: _post, delete: _delete, put: _put }

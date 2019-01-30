@@ -1,3 +1,4 @@
+const R = require('ramda')
 const mongoose = require('mongoose')
 const BlogPost = require('../../models/blog-post')
 
@@ -24,8 +25,11 @@ const _post = async payload => {
     _id: new mongoose.Types.ObjectId(),
     title: payload.title,
     content: payload.content,
-    published: new Date(),
   })
+
+  if (payload.shouldPublish) {
+    doc.set('published', new Date())
+  }
 
   await doc
     .save()
@@ -45,4 +49,24 @@ const _delete = async payload => {
     .catch(e => e)
 }
 
-module.exports = { get: _get, post: _post, delete: _delete }
+const _put = async payload => {
+  if (payload.properties.shouldPublish) {
+    const props = R.pipe(
+      R.dissoc('shouldPublish'),
+      R.assoc('published', new Date())
+    )(payload.properties)
+
+    return await BlogPost.findByIdAndUpdate({ _id: payload.postId }, props)
+      .then(res => res)
+      .catch(e => e)
+  } else {
+    return await BlogPost.findByIdAndUpdate(
+      { _id: payload.postId },
+      payload.properties
+    )
+      .then(res => res)
+      .catch(e => e)
+  }
+}
+
+module.exports = { get: _get, post: _post, delete: _delete, put: _put }
