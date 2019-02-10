@@ -5,59 +5,15 @@ const app = express()
 const DEFAULT_PORT = 5000
 const db = require('./database/mongodb.js')
 const blogPostsRoutes = require('./api/blog-posts/routes.js')
+const usersRoutes = require('./api/users/routes.js')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const jwt = require('express-jwt')
-const rsaValidation = require('auth0-api-jwt-rsa-validation')
+const jwt = require('jsonwebtoken')
 const R = require('ramda')
-const validateRequestAccess = require('./util/validate-request-access')
-
-const jwtCheck = jwt({
-  secret: rsaValidation(),
-  algorithms: ['RS256'],
-  issuer: 'https://ara-auth.eu.auth0.com/',
-  audience: 'http://localhost:5000',
-})
 
 dotenv.config()
 
 db.connect()
-
-const guard = (req, res, next) => {
-  if (R.includes(req.path, '/api/v1/posts/')) {
-    switch (req.method) {
-      case 'GET': {
-        const permissions = ['general', 'admin']
-
-        return validateRequestAccess(permissions, req, res, next)
-      }
-
-      case 'POST': {
-        const permissions = ['admin']
-
-        return validateRequestAccess(permissions, req, res, next)
-      }
-
-      case 'DELETE': {
-        const permissions = ['admin']
-
-        return validateRequestAccess(permissions, req, res, next)
-      }
-
-      case 'PUT': {
-        const permissions = ['admin']
-
-        return validateRequestAccess(permissions, req, res, next)
-      }
-
-      default: {
-        return next()
-      }
-    }
-  } else {
-    return next()
-  }
-}
 
 app.use(morgan('dev'))
 app.use(
@@ -75,7 +31,7 @@ app.use((req, res, next) => {
   )
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Scope'
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   )
 
   if (req.method === 'OPTIONS') {
@@ -84,15 +40,29 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(jwtCheck)
-app.use(guard)
-app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json({ message: 'Missing or invalid token' })
-  }
-  next()
-})
+const jwtCheck = (req, res, next) => {
+  const header = req.headers['authorization']
+  const bearer = header.split(' ')
+  const token = bearer[1]
 
+  if (req.path === '/api/v1/authenticate') {
+    return next()
+  }
+
+  return jwt.verify(token, process.env.ARA_API_SECRET, (err, decoded) => {
+    if (R.pathEq(['name'], 'JsonWebTokenError', err)) {
+      res.status(401).json({ message: 'Missing or invalid token' })
+    } else if (R.pathEq(['name'], 'TokenExpiredError', err)) {
+      return res.status(401).json({ message: 'Session expired' })
+    } else {
+      return next()
+    }
+  })
+}
+
+app.use(jwtCheck)
+
+app.use('/api/v1', usersRoutes)
 app.use('/api/v1', blogPostsRoutes)
 
 app.listen(process.env.PORT || DEFAULT_PORT, () =>
