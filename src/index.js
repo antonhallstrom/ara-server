@@ -3,6 +3,7 @@ const express = require('express')
 const expressValidator = require('express-validator')
 const app = express()
 const DEFAULT_PORT = 5000
+const DEFAULT_HOST = '0.0.0.0'
 const db = require('./database/mongodb.js')
 const blogPostsRoutes = require('./api/blog-posts/routes.js')
 const usersRoutes = require('./api/users/routes.js')
@@ -45,6 +46,11 @@ const jwtCheck = (req, res, next) => {
   const bearer = header.split(' ')
   const token = bearer[1]
 
+  // TODO: handle public/priv paths in a better way
+  if (req.method === 'GET' && req.path === '/api/v1/posts') {
+    return next()
+  }
+
   if (req.path === '/api/v1/authenticate') {
     return next()
   }
@@ -65,6 +71,11 @@ app.use(jwtCheck)
 app.use('/api/v1', usersRoutes)
 app.use('/api/v1', blogPostsRoutes)
 
-app.listen(process.env.PORT || DEFAULT_PORT, () =>
-  console.log(`Listening on ${process.env.PORT || DEFAULT_PORT}`)
+app.listen(
+  process.env.PORT || DEFAULT_PORT,
+  !process.env.PORT && DEFAULT_HOST,
+  () =>
+    console.log(
+      `Listening on ${DEFAULT_HOST}:${process.env.PORT || DEFAULT_PORT}`
+    )
 )

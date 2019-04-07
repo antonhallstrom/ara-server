@@ -42,6 +42,7 @@ const _post = async (req, res) => {
       content: req.body.content,
       shouldPublish: req.body.shouldPublish,
     })
+
     return res.status(201).json(result)
   } catch (err) {
     return res.status(500).json({ message: err })

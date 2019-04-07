@@ -31,7 +31,7 @@ const _post = async payload => {
     doc.set('published', new Date())
   }
 
-  await doc
+  return await doc
     .save()
     .then(res => res)
     .catch(e => e)
