@@ -4,6 +4,8 @@ const blogPostSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   published: { type: Date },
   title: String,
+  subtitle: String,
+  categories: Array,
   content: String,
 })
 

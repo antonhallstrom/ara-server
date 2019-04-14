@@ -39,6 +39,8 @@ const _post = async (req, res) => {
   try {
     const result = await services.post({
       title: req.body.title,
+      subtitle: req.body.subtitle,
+      categories: req.body.categories,
       content: req.body.content,
       shouldPublish: req.body.shouldPublish,
     })

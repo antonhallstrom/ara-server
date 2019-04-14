@@ -8,7 +8,7 @@ const BlogPost = require('../../models/blog-post')
  */
 const _get = async () => {
   return await BlogPost.find()
-    .select('title content published _id')
+    .select('title subtitle categories content published _id')
     .then(res => res)
     .catch(e => e)
 }
@@ -24,6 +24,8 @@ const _post = async payload => {
   const doc = new BlogPost({
     _id: new mongoose.Types.ObjectId(),
     title: payload.title,
+    subtitle: payload.subtitle,
+    categories: payload.categories,
     content: payload.content,
   })
 
