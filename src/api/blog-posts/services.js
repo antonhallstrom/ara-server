@@ -8,7 +8,7 @@ const BlogPost = require('../../models/blog-post')
  */
 const _get = async () => {
   return await BlogPost.find()
-    .select('title subtitle categories content published _id')
+    .select('title subtitle categories imageId content published _id')
     .then(res => res)
     .catch(e => e)
 }
@@ -26,6 +26,7 @@ const _post = async payload => {
     title: payload.title,
     subtitle: payload.subtitle,
     categories: payload.categories,
+    imageId: payload.imageId,
     content: payload.content,
   })
 

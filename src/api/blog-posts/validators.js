@@ -7,6 +7,7 @@ module.exports = {
     body('title').isString(),
     body('subtitle').isString(),
     body('content').isString(),
+    body('imageId').isString(),
     body('published').isBoolean(),
     body('categories').isArray(),
   ],

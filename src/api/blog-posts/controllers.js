@@ -41,6 +41,7 @@ const _post = async (req, res) => {
       title: req.body.title,
       subtitle: req.body.subtitle,
       categories: req.body.categories,
+      imageId: req.body.imageId,
       content: req.body.content,
       shouldPublish: req.body.shouldPublish,
     })
