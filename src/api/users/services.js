@@ -7,7 +7,7 @@ const authenticate = async payload => {
     const user = await User.findOne({ username: payload.username })
     if (user && bcrypt.compareSync(payload.password, user.password)) {
       return jwt.sign({ username: user.username }, process.env.ARA_API_SECRET, {
-        expiresIn: 30,
+        expiresIn: 3000,
       })
     } else {
       return {}
