@@ -10,7 +10,7 @@
     "deploy": "git push heroku master"
   },
   "engines": {
-    "node": "10.x"
+    "node": "^11.14.0"
   },
   "dependencies": {
     "auth0-api-jwt-rsa-validation": "^0.0.3",
